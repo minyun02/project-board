@@ -5,8 +5,10 @@ import com.minsproject.projectboard.domain.Article;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -72,16 +74,16 @@ class JpaRepositoryTest {
     @Test
     void givenTestData_whenDeleting_thenWorksFine() {
         //given
-        Article article = articleRepository.findById(49L).orElseThrow();
+        Article article = articleRepository.findById(1L).orElseThrow();
         long previousArticleCount = articleRepository.count();
-        long previousArticleComment = articleCommentRepository.count();
-        int deletedCommentSize = article.getArticleComments().size();
+        long previousArticleCommentCount = articleCommentRepository.count();
+        int deletedCommentsSize = article.getArticleComments().size();
 
-        //when
+        // When
         articleRepository.delete(article);
 
-        //then
+        // Then
         assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
-        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleComment - deletedCommentSize);
+        assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize);
     }
 }
