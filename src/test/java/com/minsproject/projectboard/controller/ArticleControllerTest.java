@@ -51,7 +51,7 @@ class ArticleControllerTest {
         mvc.perform(get("/articles/1"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML))
-                .andExpect(MockMvcResultMatchers.view().name("articles/index"))
+                .andExpect(MockMvcResultMatchers.view().name("articles/detail"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("article"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("articleComments"));
     }
