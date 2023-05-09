@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Getter
-@ToString
+@ToString(callSuper = true)
 @Table(indexes = {
         @Index(columnList = "title"),
         @Index(columnList = "hashtag"),
@@ -31,6 +31,8 @@ public class Article extends AuditingFields{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter @ManyToOne(optional = false) private UserAccount userAccount;
+
     @Setter @Column(nullable = false) //각 필드에 setter에 가는 이유는 일부러 사용자가 특정 필드에 접근해서 세팅하지 못하게 하려는 의도
     private String title;
 
@@ -39,20 +41,21 @@ public class Article extends AuditingFields{
     @Setter private String hashtag;
 
     @ToString.Exclude //순환참조로 인해서 연결고리를 끊어준다.
-    @OrderBy("id")
+    @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     protected Article() {}
 
-    public Article(String title, String content, String hashtag) {
+    public Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        return new Article(userAccount, title, content, hashtag);
     }
 
     //EqualsAndHashCode
