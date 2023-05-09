@@ -25,4 +25,5 @@ spring:
       base-path: /api
       detection-strategy: all
     thymeleaf3.decoupled-logic: true
+    open-in-view: false
 
